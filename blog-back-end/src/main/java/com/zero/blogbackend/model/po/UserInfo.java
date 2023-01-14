@@ -1,6 +1,7 @@
-package com.zero.blogbackend.repo.po;
+package com.zero.blogbackend.model.po;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -14,7 +15,7 @@ import lombok.Data;
 @Data
 public class UserInfo {
 
-    @TableField("id")
+    @TableId("id")
     private Integer id;
 
     @TableField("username")

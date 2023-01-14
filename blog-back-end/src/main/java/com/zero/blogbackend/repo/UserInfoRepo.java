@@ -1,5 +1,7 @@
 package com.zero.blogbackend.repo;
 
+import com.zero.blogbackend.model.po.UserInfo;
+
 /**
  * 用户信息
  *
@@ -13,6 +15,6 @@ public interface UserInfoRepo {
      * @param account 账号
      * @return 用户信息
      */
-    com.zero.blogbackend.repo.po.UserInfo getUserByAccount(String account);
+    UserInfo getUserInfoByAccount(String account);
 
 }
