@@ -2,6 +2,10 @@ package com.zero.blogbackend.utils;
 
 import org.springframework.util.DigestUtils;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.UUID;
+
 /**
  * 文字工具类
  *
@@ -17,6 +21,24 @@ public class StringUtil {
      */
     public static String md5(String value) {
         return DigestUtils.md5DigestAsHex(value.getBytes());
+    }
+
+    /**
+     * 生成 uuid
+     * @return uuid
+     */
+    public static String uuid() {
+        return UUID.randomUUID().toString().replaceAll("-", "");
+    }
+
+    /**
+     * 生成当前日期
+     * @return 当前日期
+     */
+    public static String getCurrentTime() {
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(date);
     }
 
     /**
