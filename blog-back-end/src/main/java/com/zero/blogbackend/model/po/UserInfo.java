@@ -39,6 +39,6 @@ public class UserInfo {
     @TableField("updated_time")
     private String updatedTime;
 
-    @TableField("isDeleted")
-    private Integer isDeleted;
+    @TableField("is_delete")
+    private Integer isDelete;
 }
