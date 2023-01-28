@@ -1,13 +1,115 @@
 <template>
-  <div>framework</div>
+  <div class="framework-layout">
+    <el-container>
+      <el-header class="framework-header">
+        <div class="logo">雨·忆</div>
+        <div class="user-info">雨·忆</div>
+      </el-header>
+      <el-container class="framework-container">
+        <el-aside width="200px" class="left-aside">
+          <div>
+            <el-button class="post-btn" type="primary" round>发布</el-button>
+          </div>
+          <div class="menu">
+            <el-menu
+                default-active="1-1"
+                :unique-opened="true"
+            >
+              <el-sub-menu :index="item.id" v-for="item in menuList">
+                <template  #title>
+                  <el-icon v-html="item.icon"></el-icon>
+                  <span>{{ item.title }}</span>
+                </template>
+                <el-menu-item :index="subMenu.id" v-for="subMenu in item.children">
+                  <span>{{ subMenu.title }}</span>
+                </el-menu-item>
+              </el-sub-menu>
+            </el-menu>
+          </div>
+        </el-aside>
+        <el-main class="right-main">Main</el-main>
+      </el-container>
+    </el-container>
+  </div>
 </template>
 
-<script>
-export default {
-  name: "Framework"
-}
+<script setup>
+
+import { ref } from 'vue'
+
+const menuList = ref([
+  {
+    id: '1',
+    title: '管理',
+    icon: '<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-029747aa=""><path fill="currentColor" d="M576 128v288l96-96 96 96V128h128v768H320V128h256zm-448 0h128v768H128V128z"></path></svg>',
+    children: [
+      {
+        id: '1-1',
+        title: '内容管理',
+        path: '/blog/list',
+      },
+    ],
+  },
+  {
+    id: '2',
+    title: '回收站',
+    icon: '<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-029747aa=""><path fill="currentColor" d="M160 256H96a32 32 0 0 1 0-64h256V95.936a32 32 0 0 1 32-32h256a32 32 0 0 1 32 32V192h256a32 32 0 1 1 0 64h-64v672a32 32 0 0 1-32 32H192a32 32 0 0 1-32-32V256zm448-64v-64H416v64h192zM224 896h576V256H224v640zm192-128a32 32 0 0 1-32-32V416a32 32 0 0 1 64 0v320a32 32 0 0 1-32 32zm192 0a32 32 0 0 1-32-32V416a32 32 0 0 1 64 0v320a32 32 0 0 1-32 32z"></path></svg>',
+    open: true,
+    children: [
+      {
+        id: '2-2',
+        title: '回收站',
+        path: '/blog/trashcan',
+      },
+    ],
+  },
+])
+
 </script>
 
 <style scoped>
+.el-menu {
+  border-right: 0;
+}
+
+.framework-layout {
+
+}
+
+.framework-layout .framework-header {
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-size: 30px;
+}
+
+.framework-layout .framework-container {
+  padding-top: 10px;
+  background: #f5f6f7;
+  height: calc(100vh - 60px);
+}
+
+.framework-container .left-aside {
+  padding: 0 15px;
+  width: 250px;
+}
+
+.left-aside .post-btn {
+  color: #fff;
+  height: 40px;
+  width: 100%;
+}
+
+.left-aside .menu {
+  margin-top: 15px;
+}
+
+.framework-container .right-main {
+  background: #fff;
+}
 
 </style>
