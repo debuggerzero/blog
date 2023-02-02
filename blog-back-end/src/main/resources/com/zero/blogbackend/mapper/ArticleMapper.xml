@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zero.blogbackend.repo.mapper.ArticleMapper">
+
+    <resultMap id="article" type="com.zero.blogbackend.model.po.Article">
+        <association property="articleInfo" javaType="com.zero.blogbackend.model.po.ArticleInfo">
+            <id property="id" column="id"/>
+            <result property="articleId" column="article_id"/>
+            <result property="articleTitle" column="article_title"/>
+            <result property="comment" column="article_comment"/>
+            <result property="articleImage" column="article_image"/>
+            <result property="createTime" column="article_create_time"/>
+            <result property="updateTime" column="article_update_time"/>
+            <result property="isDelete" column="article_is_delete"/>
+        </association>
+        <association property="userInfo" javaType="com.zero.blogbackend.model.po.UserInfo">
+            <id property="id" column="user_id"/>
+            <result property="username" column="user_username"/>
+            <result property="account" column="user_account"/>
+            <result property="avatar" column="user_avatar"/>
+            <result property="email" column="user_email"/>
+            <result property="isDelete" column="user_is_delete"/>
+        </association>
+    </resultMap>
+
+    <sql id="queryArticle">
+        SELECT
+            us.article_id as article_id,
+            a.id as id,
+            a.article_title as article_title,
+            a.comment as article_comment,
+            a.article_image as article_image,
+            a.create_time as article_create_time,
+            a.update_time as article_update_time,
+            us.user_id as user_id,
+            u.username as user_username,
+            u.account as user_account,
+            u.avatar as user_avatar,
+            u.email as user_email,
+            u.is_delete as user_is_delete
+        FROM user_articles us
+            LEFT JOIN user_info u on u.id = us.user_id
+            LEFT JOIN articles_info a ON a.article_id = us.article_id
+    </sql>
+
+    <select id="queryArticles" resultMap="article">
+        <include refid="queryArticle"/>
+        <where>
+            u.is_delete != 1 and a.is_delete = #{isDelete}
+            <if test="userId != null">
+                and us.user_id = #{userId}
+            </if>
+        </where>
+        limit #{paging.pageNumber}, #{paging.pageSize}
+    </select>
+
+    <select id="queryOneArticle" resultType="com.zero.blogbackend.model.po.Article">
+        <include refid="queryArticle"/>
+        <where>
+            u.is_delete != 1 and a.is_delete != 1
+            <if test="articleId">
+                and us.articleId = #{articleId}
+            </if>
+        </where>
+    </select>
+
+    <select id="totalArticleCount" resultType="java.lang.Long">
+        SELECT
+            COUNT(*)
+        FROM
+            user_articles as us,
+            user_info as u,
+            articles_info as a
+        <where>
+            u.id = us.user_id and a.article_id = us.article_id and
+            u.is_delete != 1 and a.is_delete = #{isDelete}
+            <if test="userId != -1">
+                and us.user_id = #{userId}
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertArticle">
+        insert into user_articles (user_id, article_id)
+        values (
+            #{userInfo.id},
+            #{articleInfo.articleId}
+        );
+        insert into articles_info (
+            `article_id`,
+            `article_title`,
+            `comment`,
+            `article_image`,
+            `create_time`,
+            `update_time`
+        )
+        values (
+            #{articleInfo.articleId},
+            #{articleInfo.articleTitle},
+            #{articleInfo.comment},
+            #{articleInfo.articleImage},
+            #{articleInfo.createTime},
+            #{articleInfo.updateTime}
+        );
+    </insert>
+
+</mapper>
