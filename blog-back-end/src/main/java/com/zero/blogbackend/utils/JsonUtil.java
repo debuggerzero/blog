@@ -3,7 +3,6 @@ package com.zero.blogbackend.utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.zero.blogbackend.exception.AssertionException;
 
 /**
  * Json 转化工具类
@@ -25,9 +24,24 @@ public class JsonUtil {
         try {
             res = mapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {
-            throw new AssertionException(500003, "内容序列化失败");
+            throw new RuntimeException(e.getMessage());
         }
         return  res;
+    }
+
+    public static <T> T toObject(String value, Class<T> zClass) {
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
+
+        T result;
+        try {
+            result = mapper.readValue(value, zClass);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+
+        return result;
     }
 
 }
