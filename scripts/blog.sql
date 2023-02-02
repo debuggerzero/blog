@@ -1,3 +1,5 @@
+use blog;
+
 create table user_info
 (
     `id`           int auto_increment comment '用户Id'
@@ -22,19 +24,20 @@ create table articles_info
 (
     `id`              int auto_increment comment 'Id'
         primary key,
-    `article_id`      varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  not null comment '文章唯一 Id',
-    `article_title`   varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  not null comment '文章标题',
-    `article_content` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci not null comment '文章内容',
-    `create_time`     varchar(64) default ''                                         not null comment '创建时间',
-    `update_time`     varchar(64) default ''                                         not null comment '修改时间',
-    `is_delete`       tinyint     default 0                                          not null comment '是否删除'
+    `article_id`      varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci                               not null comment '文章唯一 Id',
+    `article_title`   varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci                               not null comment '文章标题',
+    `article_image`   varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  default 'assets/default.jpg' not null comment '文章封面',
+    `comment`         varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci default ''                   not null comment '文章描述',
+    `create_time`     varchar(64)                                                    default ''                   not null comment '创建时间',
+    `update_time`     varchar(64)                                                    default ''                   not null comment '修改时间',
+    `is_delete`       tinyint                                                        default 0                    not null comment '是否删除'
 )
     AUTO_INCREMENT = 1001
     CHARACTER SET = utf8mb4
     COLLATE utf8mb4_0900_ai_ci comment '文章信息表';
 
-insert into articles_info (`article_id`, `article_title`, `article_content`, `create_time`, `update_time`)
-values ('83bfd63991f44dfc80b60cbb1d90a3ff', 'test', '1001/83bfd63991f44dfc80b60cbb1d90a3ff.json', date(current_time),
+insert into articles_info (`article_id`, `article_title`, `create_time`, `update_time`)
+values ('83bfd63991f44dfc80b60cbb1d90a3ff', 'test', date(current_time),
         date(current_time));
 
 create table user_articles
