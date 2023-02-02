@@ -1,13 +1,16 @@
 # 〇の博客
 
-![](https://zero-img-1314223587.cos.ap-shanghai.myqcloud.com/blog/requirement/%E9%9B%A8%C2%B7%E5%BF%86.png)
+![〇の博客](https://zero-img-1314223587.cos.ap-shanghai.myqcloud.com/blog/requirement/%E3%80%87%E3%81%AE%E5%8D%9A%E5%AE%A2.png)
 
 ### 技术选型
 
 - 前端：
-  - Vue3 + element-plus + editor.md
+  - Vue3 + element-plus + v-md-editor
 - 后端
   - spring + spring mvc + mybatis + mybatis-plus + spring boot + mysql8
+- 架构
+  - MVC
+
 
 ### 数据库设计
 
