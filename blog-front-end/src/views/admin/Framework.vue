@@ -2,32 +2,44 @@
   <div class="framework-layout">
     <el-container>
       <el-header class="framework-header">
-        <div class="logo">雨·忆</div>
-        <div class="user-info">雨·忆</div>
+        <div class="logo">〇の博客</div>
+        <div class="user-info">
+          <el-avatar v-if="userInfo.avatar == 'default.png'">
+            <el-icon>
+              <UserFilled/>
+            </el-icon>
+          </el-avatar>
+          <el-avatar v-else :src="userInfo.avatar"/>
+        </div>
       </el-header>
       <el-container class="framework-container">
         <el-aside width="200px" class="left-aside">
           <div>
-            <el-button class="post-btn" type="primary" round>发布</el-button>
+            <el-button class="post-btn" type="primary" @click="putArticle" round>发布</el-button>
           </div>
           <div class="menu">
             <el-menu
-                default-active="1-1"
+                router
+                :default-active="$route.path"
                 :unique-opened="true"
             >
               <el-sub-menu :index="item.id" v-for="item in menuList">
-                <template  #title>
+                <template #title>
                   <el-icon v-html="item.icon"></el-icon>
                   <span>{{ item.title }}</span>
                 </template>
-                <el-menu-item :index="subMenu.id" v-for="subMenu in item.children">
-                  <span>{{ subMenu.title }}</span>
+                <el-menu-item :index="subMenu.path" v-for="subMenu in item.children">
+                  <span>
+                    {{ subMenu.title }}
+                  </span>
                 </el-menu-item>
               </el-sub-menu>
             </el-menu>
           </div>
         </el-aside>
-        <el-main class="right-main">Main</el-main>
+        <el-main class="right-main">
+          <router-view/>
+        </el-main>
       </el-container>
     </el-container>
   </div>
@@ -35,7 +47,13 @@
 
 <script setup>
 
-import { ref } from 'vue'
+import {reactive, ref} from 'vue'
+import globalRouter from "../../utils/GlobalRouter.js";
+import router from "../../router/index.js";
+import VueCookie from "vue-cookies"
+import { ElLoading } from 'element-plus'
+
+const userInfo = reactive(VueCookie.get('userInfo') || {})
 
 const menuList = ref([
   {
@@ -44,9 +62,8 @@ const menuList = ref([
     icon: '<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-029747aa=""><path fill="currentColor" d="M576 128v288l96-96 96 96V128h128v768H320V128h256zm-448 0h128v768H128V128z"></path></svg>',
     children: [
       {
-        id: '1-1',
         title: '内容管理',
-        path: '/blog/list',
+        path: globalRouter.adminRouter.ADMIN_BLOG_LIST,
       },
     ],
   },
@@ -57,13 +74,28 @@ const menuList = ref([
     open: true,
     children: [
       {
-        id: '2-2',
         title: '回收站',
-        path: '/blog/trashcan',
+        path: globalRouter.adminRouter.ADMIN_BLOG_TRASHCAN,
       },
     ],
   },
 ])
+
+const redirectView = (path) => {
+  router.push(path);
+}
+
+const putArticle = () => {
+  const loading = ElLoading.service({
+    lock: true,
+    text: 'Loading',
+    background: 'rgba(0, 0, 0, 0.7)',
+  })
+  setTimeout(() => {
+    loading.close()
+    router.push(globalRouter.adminRouter.ADMIN_BLOG_PUT);
+  }, 500)
+}
 
 </script>
 
