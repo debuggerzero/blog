@@ -34,6 +34,8 @@ public class CosConfig {
 
     private String bucketName;
 
+    private String url;
+
     private String prefix;
 
 }

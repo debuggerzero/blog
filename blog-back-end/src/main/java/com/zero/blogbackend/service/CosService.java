@@ -8,6 +8,7 @@ import com.qcloud.cos.model.*;
 import com.qcloud.cos.region.Region;
 import com.qcloud.cos.transfer.TransferManager;
 import com.qcloud.cos.transfer.TransferManagerConfiguration;
+import com.qcloud.cos.utils.IOUtils;
 import com.zero.blogbackend.config.CosConfig;
 import com.zero.blogbackend.exception.AssertionException;
 import com.zero.blogbackend.utils.StringUtil;
@@ -64,21 +65,31 @@ public class CosService {
      * @return 文章存储路径
      */
     public String putArticle(String article, String key) {
-
-        String path = key + ".json";
-        TransferManager transferManager = getTransferManager();
         InputStream inputStream = new ByteArrayInputStream(article.getBytes());
+        return putObject(inputStream, key, (long) article.getBytes().length);
+    }
+
+    /**
+     * 上传 Object
+     * @param inputStream 数据流
+     * @param key 键
+     * @param contentLength 内容长度
+     * @return key
+     */
+    public String putObject(InputStream inputStream, String key, Long contentLength) {
+
+        TransferManager transferManager = getTransferManager();
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
-        objectMetadata.setContentLength(article.getBytes().length);
+        objectMetadata.setContentLength(contentLength);
 
         PutObjectRequest putObjectRequest =
-                new PutObjectRequest(cosConfig.getBucketName(), cosConfig.getPrefix() + path, inputStream, objectMetadata);
-
+                new PutObjectRequest(cosConfig.getBucketName(), cosConfig.getPrefix() + key, inputStream, objectMetadata);
         putObjectRequest.setStorageClass(StorageClass.Standard);
 
         try {
             UploadResult uploadResult = transferManager.upload(putObjectRequest).waitForUploadResult();
+            return uploadResult.getKey();
         }
         catch (Exception e) {
             throw new AssertionException(500002, "文件上传失败");
@@ -86,8 +97,41 @@ public class CosService {
         finally {
             shutdownTransferManager(transferManager);
         }
+    }
 
-        return path;
+    public String getObject(String key) {
+
+        COSClient cosClient = getCosClient();
+
+        GetObjectRequest getObjectRequest =
+                new GetObjectRequest(cosConfig.getBucketName(), cosConfig.getPrefix() + key);
+        COSObjectInputStream cosObjectInput = null;
+        byte[] bytes = null;
+
+        try {
+            COSObject cosObject = cosClient.getObject(getObjectRequest);
+            COSObjectInputStream objectContent = cosObject.getObjectContent();
+            bytes = IOUtils.toByteArray(objectContent);
+        }
+        catch (Exception e) {
+            throw new AssertionException(500004, "文章获取失败");
+        }
+
+        String res = new String(bytes);
+
+        return res;
+    }
+
+    public String getArticleKey(String userId, String articleId) {
+        return userId + "/" + articleId + ".md";
+    }
+
+    public String getImageUrl(String imageKey) {
+        return cosConfig.getUrl() + cosConfig.getPrefix() + imageKey;
+    }
+
+    public String getImageKey(String imageUrl) {
+        return imageUrl.replaceAll(cosConfig.getUrl(), "").replaceAll(cosConfig.getPrefix(), "");
     }
 
 }
