@@ -58,4 +58,18 @@ public interface ArticleRepo {
      */
     Long totalArticleCount(Integer userId, Integer isDelete);
 
+    /**
+     * 彻底删除文章
+     * @param articleId 文章
+     * @return 操作成功的条数
+     */
+    Integer deleteArticleComplete(String articleId);
+
+    /**
+     * 恢复文章
+     * @param id id
+     * @return 成功操作的行数
+     */
+    Integer restoreArticle(Integer id);
+
 }

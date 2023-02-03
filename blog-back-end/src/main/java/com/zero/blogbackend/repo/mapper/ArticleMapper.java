@@ -34,7 +34,7 @@ public interface ArticleMapper extends BaseMapper<Article> {
     /**
      * 添加文章
      * @param article 文章
-     * @return 操作成功的列数
+     * @return 操作成功的行数
      */
     Integer insertArticle(Article article);
 
@@ -45,5 +45,12 @@ public interface ArticleMapper extends BaseMapper<Article> {
      * @return 返回符合要求的文章
      */
     Long totalArticleCount(Integer userId, Integer isDelete);
+
+    /**
+     * 彻底删除文章
+     * @param articleId 文章 Id
+     * @return 操作成功的行数
+     */
+    Integer deleteArticleComplete(String articleId);
 
 }

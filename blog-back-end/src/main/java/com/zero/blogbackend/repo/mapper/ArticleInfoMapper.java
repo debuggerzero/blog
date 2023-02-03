@@ -13,4 +13,11 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface ArticleInfoMapper extends BaseMapper<ArticleInfo> {
 
+    /**
+     * 恢复文章
+     * @param id 文章 Id
+     * @return 操作成功的行数
+     */
+    Integer restoreArticle(Integer id);
+
 }

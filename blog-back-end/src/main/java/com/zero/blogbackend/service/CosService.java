@@ -115,11 +115,23 @@ public class CosService {
         }
         catch (Exception e) {
             throw new AssertionException(500004, "文章获取失败");
+        } finally {
+            shutdownCosClient(cosClient);
         }
 
-        String res = new String(bytes);
+        return new String(bytes);
+    }
 
-        return res;
+    public void deleteObject(String key) {
+        COSClient cosClient = getCosClient();
+        try {
+            cosClient.deleteObject(cosConfig.getBucketName(), cosConfig.getPrefix() + key);
+        }
+        catch (Exception e) {
+            throw new AssertionException(500004, "删除失败");
+        } finally {
+            shutdownCosClient(cosClient);
+        }
     }
 
     public String getArticleKey(String userId, String articleId) {
@@ -133,5 +145,4 @@ public class CosService {
     public String getImageKey(String imageUrl) {
         return imageUrl.replaceAll(cosConfig.getUrl(), "").replaceAll(cosConfig.getPrefix(), "");
     }
-
 }

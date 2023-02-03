@@ -66,4 +66,14 @@ public class ArticleManageController {
         return articleService.updateArticle(articleCommand);
     }
 
+    @DeleteMapping("/trashcan/delete/{userId}/{articleId}")
+    public Integer deleteArticleComplete(@PathVariable String userId, @PathVariable String articleId) {
+        return articleService.deleteArticleComplete(userId, articleId);
+    }
+
+    @PutMapping("/trashcan/restore/{id}")
+    public Integer restoreArticle(@PathVariable Integer id) {
+        return articleService.restoreArticle(id);
+    }
+
 }

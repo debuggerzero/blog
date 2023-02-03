@@ -55,4 +55,14 @@ public class ArticleRepoImpl implements ArticleRepo {
         return articleMapper.totalArticleCount(userId, isDelete);
     }
 
+    @Override
+    public Integer deleteArticleComplete(String articleId) {
+        return articleMapper.deleteArticleComplete(articleId);
+    }
+
+    @Override
+    public Integer restoreArticle(Integer id) {
+        return articleInfoMapper.restoreArticle(id);
+    }
+
 }

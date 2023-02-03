@@ -45,6 +45,18 @@
             LEFT JOIN articles_info a ON a.article_id = us.article_id
     </sql>
 
+    <delete id="deleteArticleComplete">
+        DELETE FROM
+            articles_info
+        WHERE
+            articles_info.article_id = #{articleId};
+
+        DELETE FROM
+            user_articles
+        WHERE
+            user_articles.article_id = #{articleId};
+    </delete>
+
     <select id="queryArticles" resultMap="article">
         <include refid="queryArticle"/>
         <where>
