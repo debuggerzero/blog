@@ -4,7 +4,7 @@
       <el-header class="framework-header">
         <div class="logo">〇の博客</div>
         <div class="user-info">
-          <el-avatar v-if="userInfo.avatar == 'default.png'">
+          <el-avatar v-if="userInfo.avatar === 'default.png'">
             <el-icon>
               <UserFilled/>
             </el-icon>

@@ -1,8 +1,10 @@
 <template>
   <div style="width: 100%">
+    <el-empty description="No Data" v-if="articleList.length === 0" />
     <el-table
         :data="articleList"
         style="width: 100%; height: calc(100vh - 155px);"
+        v-else
     >
       <el-table-column prop="articleImage" label="封面" width="130" align="left">
         <template #default="scope">

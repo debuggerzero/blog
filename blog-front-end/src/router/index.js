@@ -32,13 +32,13 @@ const routes = [
             {
                 path: globalRouter.adminRouter.ADMIN_BLOG_TRASHCAN,
                 name: 'blog/trashcan',
-                component: () => import('../views/admin/blog/BlogList.vue'),
+                component: () => import('../views/admin/trashcan/TrashcanList.vue'),
             },
             {
                 path: globalRouter.adminRouter.ADMIN_BLOG_EDIT,
                 name: 'blog/edit',
                 component: () => import('../views/admin/blog/EditArticle.vue')
-            }
+            },
         ],
     },
 ];
