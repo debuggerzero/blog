@@ -101,4 +101,21 @@ public class ArticleService {
         return length;
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    public Integer deleteArticleComplete(String userId, String articleId) {
+
+        Integer length = articleRepo.deleteArticleComplete(articleId);
+        if (length == 0) {
+            throw new AssertionException(500004, "删除失败");
+        }
+        cosService.deleteObject(cosService.getArticleKey(userId, articleId));
+
+        return length;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public Integer restoreArticle(Integer id) {
+        return articleRepo.restoreArticle(id);
+    }
+
 }
