@@ -139,6 +139,7 @@ public class CosService {
     }
 
     public String getImageUrl(String imageKey) {
+        imageKey = getImageKey(imageKey);
         return cosConfig.getUrl() + cosConfig.getPrefix() + imageKey;
     }
 
