@@ -71,6 +71,8 @@ const props = defineProps({
     default: {
       userId: '',
       title: '',
+      comment: '',
+      url: '',
       content: {
         markdownContent: '',
       },
@@ -79,18 +81,19 @@ const props = defineProps({
 })
 
 const form = reactive({
-  resource: '无封面',
-  comment: '',
+  resource: props.articleInfo.url === '' ? '无封面' : '单图',
+  comment: props.articleInfo.comment,
 })
+
+const DEFAULT_IMAGE = 'assets/default.jpg';
+let imageUrl = ref(props.articleInfo.url === '' ? DEFAULT_IMAGE : props.articleInfo.url);
+let tempUrl = imageUrl;
 
 const emit = defineEmits();
 const close = () => {
   emit('update:dialogVisible', false);
+  imageUrl = tempUrl = props.articleInfo.url === '' ? DEFAULT_IMAGE : props.articleInfo.url;
 }
-
-const DEFAULT_IMAGE = 'assets/default.jpg';
-const imageUrl = ref(DEFAULT_IMAGE);
-let tempUrl = DEFAULT_IMAGE;
 
 const change = (label) => {
   if (label === '无封面') {
