@@ -18,7 +18,7 @@
                     @change="change"
     />
     <UploadDialog v-model:dialog-visible="dialogVisible"
-                  v-model:article-info="articleInfo"
+                  :article-info="articleInfo"
     />
   </div>
 </template>
@@ -39,7 +39,7 @@ let editor = reactive({
   modelValue: '',
 })
 
-const article = router.currentRoute.value.query.article || JSON.stringify({ articleTitle: "" }) ;
+const article = router.currentRoute.value.query.article || JSON.stringify({ articleTitle: "" , comment: ""}) ;
 const title = ref(JSON.parse(article).articleTitle);
 
 let dialogVisible = ref(false);
@@ -49,6 +49,8 @@ const userId = VueCookie.get('userInfo').id;
 const articleInfo = reactive({
   userId: userId,
   title: title,
+  comment: JSON.parse(article).comment,
+  url: JSON.parse(article).articleImage,
   content: {
     htmlContent: '',
   },
