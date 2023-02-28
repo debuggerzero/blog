@@ -1,10 +1,9 @@
 <template>
   <div>
-    <v-md-editor v-model="data.modelValue"
-                 :height="data.height + 'px'"
+    <v-md-editor v-model="modelValue"
+                 :height="props.height + 'px'"
                  :disabled-menus="[]"
                  :include-level="[1, 2, 3, 4, 5, 6]"
-                 @change="change"
                  @upload-image="handleUploadImage">
     </v-md-editor>
   </div>
@@ -15,7 +14,7 @@ import VMdEditor from '@kangc/v-md-editor';
 import '@kangc/v-md-editor/lib/style/base-editor.css';
 import githubTheme from '@kangc/v-md-editor/lib/theme/github.js';
 import '@kangc/v-md-editor/lib/theme/style/github.css';
-import {getCurrentInstance, reactive, ref} from 'vue';
+import {getCurrentInstance, ref} from 'vue';
 
 const { proxy } = getCurrentInstance();
 
@@ -32,26 +31,14 @@ VMdEditor.use(githubTheme, {
 const userId = VueCookie.get('userInfo').id;
 
 const props = defineProps({
-  modelValue: {
-    type: String,
-    default: "",
-  },
   height: {
     type: Number,
     default: 500,
   }
 })
 
-const data = ref({
-  modelValue: props.modelValue,
-  height: props.height
-})
-
-const emit = defineEmits();
-const change = (markdownContent, htmlContent) => {
-  emit("update:modelValue", markdownContent);
-  emit("change")
-}
+const modelValue = ref('');
+defineExpose(modelValue)
 
 const handleUploadImage = async (event, insertImage, files) => {
   let result = await proxy.Request({
@@ -79,6 +66,9 @@ const init = () => {
     let articleId = JSON.parse(article).articleId;
     getArticleContent(userId, articleId);
   }
+  if (router.currentRoute.value.name === 'blog/put') {
+    modelValue.value = '';
+  }
 }
 
 const getArticleContent = async (userId, articleId) => {
@@ -89,7 +79,7 @@ const getArticleContent = async (userId, articleId) => {
   if (!results) {
     await router.push(globalRouter.adminRouter.ADMIN_BLOG_LIST);
   }
-  data.value.modelValue = results;
+  modelValue.value = results;
 }
 
 init();

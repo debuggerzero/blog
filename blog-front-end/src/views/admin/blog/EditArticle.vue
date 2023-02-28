@@ -8,14 +8,13 @@
     </el-input>
     <el-button type="primary"
                class="upload-button"
-               @click="dialogVisible = onUploadArticle()">
+               @click="dialogVisible = onUploadArticle(markdownContent)">
       <el-icon class="el-icon--left"><Finished /></el-icon>提交
     </el-button>
   </div>
   <div>
-    <EditorMarkdown v-model:model-value="editor.modelValue"
+    <EditorMarkdown ref="markdownContent"
                     :height="editor.height"
-                    @change="change"
     />
     <UploadDialog v-model:dialog-visible="dialogVisible"
                   :article-info="articleInfo"
@@ -36,7 +35,6 @@ const {proxy} = getCurrentInstance();
 
 let editor = reactive({
   height: window.innerHeight - 168,
-  modelValue: '',
 })
 
 const article = router.currentRoute.value.query.article || JSON.stringify({ articleTitle: "" , comment: ""}) ;
@@ -46,26 +44,24 @@ let dialogVisible = ref(false);
 
 const userId = VueCookie.get('userInfo').id;
 
+const markdownContent = ref();
 const articleInfo = reactive({
   userId: userId,
   title: title,
   comment: JSON.parse(article).comment,
   url: JSON.parse(article).articleImage,
   content: {
-    htmlContent: '',
+    markdownContent: '',
   },
 })
 
-const change = () => {
-  articleInfo.content.markdownContent = editor.modelValue;
-}
-
-const onUploadArticle = () => {
+const onUploadArticle = (markContent) => {
+  articleInfo.content.markdownContent = markContent;
   if (title.value.length < 3 || title.value.length > 100) {
     ElMessage.warning('标题长度应在 3 - 10 之间')
     return false;
   }
-  if (editor.modelValue === '') {
+  if (!articleInfo.content.markdownContent) {
     ElMessage.warning('文章内容不能为空');
     return false;
   }
