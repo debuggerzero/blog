@@ -96,7 +96,8 @@ public class ArticleService {
         if (length == 0) {
             throw new AssertionException(500004, "更新失败");
         }
-        cosService.getArticleKey(articleCommand.getUserId().toString(), articleCommand.getArticleId());
+        String articleKey = cosService.getArticleKey(articleCommand.getUserId().toString(), articleCommand.getArticleId());
+        cosService.putArticle(articleCommand.getArticleContent(), articleKey);
 
         return length;
     }
